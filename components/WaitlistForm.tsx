@@ -25,21 +25,21 @@ export default function WaitlistForm({ onClose }: WaitlistFormProps) {
     setError('');
 
     try {
-      const res = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || 'Something went wrong. Please try again.');
-      } else {
-        setStep('success');
+      // Save to localStorage so submissions persist client-side
+      const existing = JSON.parse(localStorage.getItem('chatia_waitlist') || '[]');
+      const duplicate = existing.find((entry: { email: string }) =>
+        entry.email.toLowerCase() === formData.email.trim().toLowerCase()
+      );
+      if (duplicate) {
+        setError('This email is already on the waitlist! Check your inbox for confirmation.');
+        setLoading(false);
+        return;
       }
+      existing.push({ ...formData, joinedAt: new Date().toISOString() });
+      localStorage.setItem('chatia_waitlist', JSON.stringify(existing));
+      setStep('success');
     } catch {
-      setError('Network error. Please try again.');
+      setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
