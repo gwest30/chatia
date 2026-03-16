@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Providers from "@/components/Providers";
 
 export const metadata: Metadata = {
   title: "Chatia.ai — AI Voice Automation for GHL & VAPI",
@@ -38,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased bg-[#0a0a0f]">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

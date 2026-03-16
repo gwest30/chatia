@@ -42,3 +42,10 @@ next-env.d.ts
 
 # waitlist data (keep out of repo in production)
 # data/waitlist.json
+
+# SQLite databases (contain real data)
+*.db
+*.db-shm
+*.db-wal
+
+/app/generated/prisma

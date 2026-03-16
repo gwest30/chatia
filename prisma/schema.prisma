@@ -1,0 +1,43 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../app/generated/prisma"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("CLIENT")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspace Workspace?
+}
+
+model Workspace {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name String
+
+  // GHL sub-account connection
+  ghlLocationId   String?
+  ghlLocationName String?
+  ghlAccessToken  String?
+  ghlRefreshToken String?
+  ghlTokenExpiry  DateTime?
+
+  // VAPI - Knowledge Base only
+  vapiApiKey        String?
+  vapiPhoneNumberId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
